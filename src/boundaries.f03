@@ -13,11 +13,11 @@ module Boundaries
     do i=2, nx+1
       do ieq=1, neq
       
-        !call applyNeumann(u(ieq,i,1), u(ieq,i,2))
-        !call applyNeumann(u(ieq,i,ny+2), u(ieq,i,ny+1))
+        call applyNeumann(u(ieq,i,1), u(ieq,i,2))
+        call applyNeumann(u(ieq,i,ny+2), u(ieq,i,ny+1))
         
-        u(ieq,i,1) = u(ieq,i,2)
-        u(ieq,i,ny+2) = u(ieq,i,ny+1)
+        !u(ieq,i,1) = u(ieq,i,2)
+        !u(ieq,i,ny+2) = u(ieq,i,ny+1)
         
       end do
     end do
@@ -26,10 +26,10 @@ module Boundaries
     do j=2, ny+1
       do ieq=1, neq
       
-        !call applyPeriodic(u(ieq,1,j), u(ieq,2,j), u(ieq,nx+1,j), u(ieq,nx+2,j))
+        call applyPeriodic(u(ieq,1,j), u(ieq,2,j), u(ieq,nx+1,j), u(ieq,nx+2,j))
         
-        u(ieq,1,j) = u(ieq,nx+1,j)
-        u(ieq,nx+2,j) = u(ieq,2,j)
+        !u(ieq,1,j) = u(ieq,nx+1,j)
+        !u(ieq,nx+2,j) = u(ieq,2,j)
       
       end do
     end do
