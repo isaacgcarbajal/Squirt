@@ -14,9 +14,6 @@ program Main
 
     call validTimeStep()
     call solutionStep()
-  
-    !call finishClockVariables()
-    !stop
 
     if(currentTime >= timeToPrint) then
       call writeToDisk()
