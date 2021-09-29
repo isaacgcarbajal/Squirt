@@ -5,8 +5,8 @@ module Parameters
   ! Space parameters
   !--------------------------------------------------------------------------
   ! Number of nodes in X and Y
-  integer, parameter :: nx = 400
-  integer, parameter :: ny = 400
+  integer, parameter :: nx = 256
+  integer, parameter :: ny = 256
   ! Domain delimitation in X
   real*8, parameter :: xMin = 0.0
   real*8, parameter :: xMax = 1.0
@@ -39,15 +39,5 @@ module Parameters
   !--------------------------------------------------------------------------
   real*8, parameter :: A=0.01
   
-  !--------------------------------------------------------------------------
-  ! Boundary conditions:
-  ! 1 .- Dirichlet
-  ! 2 .- Newmann BC
-  ! 3 .- Periodic
-  !--------------------------------------------------------------------------
-  !integer :: topBC    = 2
-  !integer :: bottomBC = 2
-  !integer :: leftBC   = 3
-  !integer :: rightBC  = 3
 
 end module Parameters
