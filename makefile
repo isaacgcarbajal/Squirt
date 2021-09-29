@@ -34,8 +34,7 @@ MODS=$(patsubst $(OBJDIR)/%.o, $(MODSDIR)/%.mod, $(OBJS))
 
 .PHONY= all run rerun clean plot gif compilingMessage
 
-#all: compile run plot gif
-all: compile run
+all: compile run plot gif
 
 rerun: all | clean
 
