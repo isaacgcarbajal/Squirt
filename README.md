@@ -1,6 +1,6 @@
 # poseidon
 
-<img src="https://user-images.githubusercontent.com/34818410/135569029-9f4ff53b-9b93-4ef5-afef-2cc7bfe98740.png" width="100" height="100">
+<img src="https://user-images.githubusercontent.com/34818410/135569029-9f4ff53b-9b93-4ef5-afef-2cc7bfe98740.png" width="500" height="500">
 
 
 ![HLLC_000](https://user-images.githubusercontent.com/34818410/135569029-9f4ff53b-9b93-4ef5-afef-2cc7bfe98740.png)
