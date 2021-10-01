@@ -9,8 +9,8 @@ module Solver
     real*8, intent(in) :: dt
     
     integer :: i, j
-    do j=2,ny+1
-      do i=2,nx+1
+    do j=1,ny
+      do i=1,nx
       
         up(:,i,j) = u(:,i,j) - dt*(f(:,i,j) - f(:,i-1,j))/dx  &
                              - dt*(g(:,i,j) - g(:,i,j-1))/dy
@@ -22,19 +22,19 @@ module Solver
   subroutine solutionStep()
     use Globals, only: dt, u, up, currentIteration, currentTime
     use HydroCore, only: updatePrimitivesWith, fullPrimitive2conserved, addArtifitialViscosity
-    use Boundaries, only: boundaryConditions
+    use Boundaries, only: boundaryConditionsI, boundaryConditionsII
     use HLLC, only: fullHLLCFlux
     implicit none
     
-    call fullHLLCFlux()
+    call fullHLLCFlux(1)
     call stepConserved(dt/2)
-    call boundaryConditions(up)
+    call boundaryConditionsII(up)
     call updatePrimitivesWith(up)
     
-    call fullHLLCFlux()
+    call fullHLLCFlux(2)
     call stepConserved(dt)
     call addArtifitialViscosity()
-    call boundaryConditions(u)
+    call boundaryConditionsI(u)
     call updatePrimitivesWith(u)
 
     currentTime = currentTime + dt

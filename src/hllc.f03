@@ -72,42 +72,87 @@ module HLLC
   
   end subroutine primitive2HLLCFlux
 
-  subroutine fullHLLCFlux()
+  subroutine fullHLLCFlux(halfStep)
     
     use Globals, only: neq, nx, ny, prim, F, G
     use Utilities, only: swapXY
+    use HydroCore, only: slopeLimiter
     implicit none
     
+    integer, intent(in) :: halfStep
+    
     real*8 :: ppL(neq), ppR(neq)
+    real*8 :: ppLL(neq), ppRR(neq)
     real*8 :: tmpFlux(neq)
     
     integer :: i, j
-    do j=1,ny+1
-      do i=1,nx+1
-        
-        ! Fluxes in X
-        ppL(:) = prim(:, i, j)
-        ppR(:) = prim(:, i+1, j)
-        
-        call primitive2HLLCFlux(ppL, ppR, tmpFlux)
-        
-        F(:,i,j) = tmpFlux(:)
-        
-        ! Fluxes in Y
-        ppL(:) = prim(:, i, j)
-        ppR(:) = prim(:, i, j+1)
-        call swapXY(ppL)
-        call swapXY(ppR)
-        
-        call primitive2HLLCFlux(ppL, ppR, tmpFlux)
-        call swapXY(tmpFlux)
-        
-        G(:,i,j) = tmpFlux(:)
-
-        
-      end do
-    end do
     
+    select case(halfStep)
+    
+    case(1)
+      do j=0,ny
+        do i=0,nx
+          
+          ! Fluxes in X
+          ppL(:) = prim(:, i, j)
+          ppR(:) = prim(:, i+1, j)
+          
+          call primitive2HLLCFlux(ppL, ppR, tmpFlux)
+          
+          F(:,i,j) = tmpFlux(:)
+          
+          ! Fluxes in Y
+          ppL(:) = prim(:, i, j)
+          ppR(:) = prim(:, i, j+1)
+          call swapXY(ppL)
+          call swapXY(ppR)
+          
+          call primitive2HLLCFlux(ppL, ppR, tmpFlux)
+          call swapXY(tmpFlux)
+          
+          G(:,i,j) = tmpFlux(:)
+    
+          
+        end do
+      end do
+      
+    case(2)
+      do j=0,ny
+        do i=0,nx
+          
+          ! Fluxes in X
+          ppLL(:) = prim(:, i-1, j)
+          ppL(:)  = prim(:, i  , j)
+          ppR(:)  = prim(:, i+1, j)
+          ppRR(:) = prim(:, i+2, j)
+          call slopeLimiter(ppLL, ppL, ppR, ppRR)
+          
+          call primitive2HLLCFlux(ppL, ppR, tmpFlux)
+          
+          F(:,i,j) = tmpFlux(:)
+          
+          ! Fluxes in Y
+          ppLL(:) = prim(:, i, j-1)
+          ppL(:)  = prim(:, i, j  )
+          ppR(:)  = prim(:, i, j+1)
+          ppRR(:) = prim(:, i, j+2)
+          call swapXY(ppLL)
+          call swapXY(ppL)
+          call swapXY(ppR)
+          call swapXY(ppRR)
+          call slopeLimiter(ppLL, ppL, ppR, ppRR)
+          
+          call primitive2HLLCFlux(ppL, ppR, tmpFlux)
+          call swapXY(tmpFlux)
+          
+          G(:,i,j) = tmpFlux(:)
+    
+          
+        end do
+      end do
+      
+    end select
+      
   end subroutine fullHLLCFlux
 
 end module HLLC

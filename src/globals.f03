@@ -16,11 +16,11 @@ module Globals
   !--------------------------------------------------------------------------
   ! Variables and Fluxes
   !--------------------------------------------------------------------------
-  real*8 :: prim(neq, nx+2, ny+2)     ! Primitive variables
-  real*8 ::    u(neq, nx+2, ny+2)     ! Current conserved variables
-  real*8 ::   up(neq, nx+2, ny+2)     ! Advanced conserved variables
-  real*8 ::    f(neq, nx+2, ny+2)     ! Physical Fluxes in X
-  real*8 ::    g(neq, nx+2, ny+2)     ! Physical Fluxes in Y
+  real*8 :: prim(neq, -1:nx+2, -1:ny+2)     ! Primitive variables
+  real*8 ::    u(neq, -1:nx+2, -1:ny+2)     ! Current conserved variables
+  real*8 ::   up(neq, -1:nx+2, -1:ny+2)     ! Advanced conserved variables
+  real*8 ::    f(neq, -1:nx+2, -1:ny+2)     ! Physical Fluxes in X
+  real*8 ::    g(neq, -1:nx+2, -1:ny+2)     ! Physical Fluxes in Y
 
   !--------------------------------------------------------------------------
   ! Time and iteration variables

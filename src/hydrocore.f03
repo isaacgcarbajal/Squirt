@@ -22,8 +22,8 @@ module HydroCore
     implicit none
     
     integer :: i, j
-    do j=1,ny+2
-      do i=1,nx+2
+    do j=-1,ny+2
+      do i=-1,nx+2
       
         call conserved2primitive(u(:,i,j), prim(:,i,j))
       
@@ -52,8 +52,8 @@ module HydroCore
     implicit none
     
     integer :: i, j
-    do j=1,ny+2
-      do i=1,nx+2
+    do j=-1,ny+2
+      do i=-1,nx+2
       
         call primitive2conserved(prim(:,i,j), u(:,i,j))
       
@@ -67,11 +67,11 @@ module HydroCore
     use Globals, only: neq, nx, ny, prim, gasGamma
     implicit none
     
-    real*8, intent(in) :: u(neq,nx+2,ny+2)
+    real*8, intent(in) :: u(neq,-1:nx+2,-1:ny+2)
 
     integer :: i, j
-    do j=1,ny+2
-      do i=1,nx+2
+    do j=-1,ny+2
+      do i=-1,nx+2
       
         prim(1,i,j) = u(1,i,j)
         prim(2,i,j) = u(2,i,j)/u(1,i,j)
@@ -104,8 +104,8 @@ module HydroCore
     real*8 :: maxSpeedY = 0.0
     
     integer :: i, j
-    do j=1,ny+2
-      do i=1,nx+2
+    do j=-1,ny+2
+      do i=-1,nx+2
       
         call soundSpeed(prim(1,i,j), prim(4,i,j), cs)
         
@@ -144,15 +144,57 @@ module HydroCore
     implicit none
     
     integer :: i, j
-    do j=2,ny+1
-      do i=2,nx+1
+    do j=1,ny
+      do i=1,nx
       
-        u(:,i,j) = up(:,i,j) + eta*( up(:,i-1,j) + up(:,i+1,j)  &
-                                    +up(:,i,j-1) + up(:,i,j+1)  &
-                                    -4*up(:,i,j))
+        u(:,i,j) = up(:,i,j) + eta*(  up(:,i-1,j) + up(:,i+1,j)  &
+                                    + up(:,i,j-1) + up(:,i,j+1)  &
+                                    - 4*up(:,i,j))
       end do
     end do
   
   end subroutine addArtifitialViscosity
+
+  subroutine slopeLimiter(ppll, ppl, ppr, pprr)
+  
+    use Globals, only: neq
+    implicit none
+    real*8, intent(in)   :: ppll(neq), pprr(neq)
+    real*8, intent(inout):: ppl(neq), ppr(neq)
+    
+    real*8 :: deltaL, deltaM, deltaR
+    real*8 :: avrgL, avrgR
+    
+    integer::ieq
+      
+    do ieq=1,neq
+      
+      deltaL = ppl(ieq)  - ppll(ieq)
+      deltaM = ppr(ieq)  - ppl(ieq)
+      deltaR = pprr(ieq) - ppr(ieq)
+      
+      avrgL = average(deltaL, deltaM)
+      avrgR = average(deltaM, deltaR)
+      
+      ppl(ieq) = ppl(ieq) + 0.5*avrgL
+      ppR(ieq) = ppR(ieq) - 0.5*avrgR
+    
+    end do
+    
+    contains
+    
+    real function average(a,b)
+      implicit none
+      real*8 :: s
+
+      real*8, intent(in) :: a, b
+    
+      ! minmod limiter
+      s = sign(1.0D0,a)
+      average = s*max(0.0,min(abs(a),s*b))
+    
+    end function average
+  
+  end subroutine slopeLimiter
 
 end module HydroCore

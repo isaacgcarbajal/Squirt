@@ -17,8 +17,8 @@ module Utilities
 
     ! Write the values of the primitives to the file
     do ieq=1,neq
-      do i=2,nx+1
-        do j=2,ny+1
+      do i=1,nx
+        do j=1,ny
         
           write(10) prim(ieq, i, j)
           

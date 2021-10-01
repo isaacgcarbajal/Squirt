@@ -25,8 +25,8 @@ module Init
     implicit none
     
     integer :: i,j
-    do j=1,ny+2
-      do i=1,nx+2
+    do j=-1,ny+2
+      do i=-1,nx+2
         if(yMin+(j-1)*dy <= 0.5) then
           prim(1,i,j) = 2.0
           prim(2,i,j) = 0.5
