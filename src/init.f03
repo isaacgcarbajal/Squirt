@@ -2,6 +2,13 @@ module Init
 
   contains
   
+  !============================================================================
+  ! initialConditions:
+  !   Initialize the value of the primitive and conserved variables in the
+  !   entire domain. Also it initializes the time variables to meassure the
+  !   excecution time of the simulation and write to disk the initial
+  !   condition.
+  !============================================================================
   subroutine initialConditions()
   
     use Globals, only: neq, nx, ny, xMin, yMin, dx, dy,               &
@@ -19,6 +26,11 @@ module Init
     
   end subroutine initialConditions
   
+  !============================================================================
+  ! initializePrimitives:
+  !   Subroutine to initialize the value of the primitive variables in the
+  !   entire domain (user can modify it).
+  !============================================================================
   subroutine initializePrimitives()
   
     use Globals, only: nx, ny, yMin, dy, A, prim
@@ -46,7 +58,14 @@ module Init
     
   end subroutine initializePrimitives
   
+  !============================================================================
+  ! initializeTimeVariables:
+  !   Subroutine to initialize the iteration and time variables of the
+  !   simulation. Also intializes the time to print the next state to disk and
+  !   the number of the file.
+  !============================================================================
   subroutine initializeTimeVariables()
+  
     use Globals, only: currentTime, currentIteration, nextFileNumber, timeToPrint
     implicit none
     
