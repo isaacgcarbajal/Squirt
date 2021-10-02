@@ -2,6 +2,13 @@ module Utilities
 
   contains
   
+  !============================================================================
+  ! writeToDisk:
+  !   Subroutine to write to disk a binary of the current array of primitives.
+  !   Also it updates the value of the next file and the time to  print the
+  !   next file.
+  !   It prints to screen the file name of the binary file.
+  !============================================================================
   subroutine writeToDisk()
     use Globals, only: neq, nx, ny, nextFileNumber, timeToPrint, dtToPrint, prim
     implicit none
@@ -37,6 +44,12 @@ module Utilities
   
   end subroutine writeToDisk
 
+  !============================================================================
+  ! initializeClockVariables:
+  !   Subroutine to initialize the time variables via the "system_clock"
+  !   function in order to meassure the physical time taken by the program to
+  !   finish.
+  !============================================================================
   subroutine initializeClockVariables()
     
     use Globals, only: clockStart, clockRate, clockMax
@@ -46,6 +59,12 @@ module Utilities
   
   end subroutine initializeClockVariables
   
+  !============================================================================
+  ! finishClockVariables:
+  !   Subroutine to calculate the elapsed time from the beginning of the
+  !   simulation to the end. Also prints in screen the number of iterations
+  !   and the total physical elapsed time.
+  !============================================================================
   subroutine finishClockVariables()
     use Globals, only: clockStart, clockRate, clockMax, clockCount, currentIteration
   
@@ -54,6 +73,13 @@ module Utilities
                                   (clockCount-clockStart)/real(clockRate), " s"
   end subroutine finishClockVariables
 
+  !============================================================================
+  ! swapXY:
+  !   Subroutine to swap the value of the variables. It is used in order to
+  !   calculate the fluxes with only one "x" function, swapping the X and Y
+  !   components of the simulation and then swapping again once the fluxes have
+  !   been calculated.
+  !============================================================================
   subroutine swapXY(var)
     use Globals, only: neq
     real*8, intent(inout) :: var(neq)
