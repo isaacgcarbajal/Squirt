@@ -2,6 +2,16 @@ module HLLC
 
   contains
   
+  !============================================================================
+  ! primitive2HLLCFlux:
+  !   Subroutine to calculate the HLLC flux from the primitive vatiables in one
+  !   cell.
+  ! Input:
+  !   ppL(neq) -> Primitive variables on the left side of the cell
+  !   ppR(neq) -> Primitive variables on the right side of the cell
+  ! Output:
+  !   ff(neq)  -> The HLLC fluxes in the cell
+  !============================================================================
   subroutine primitive2HLLCFlux(ppL, ppR, ff)
   
     use Globals, only: neq, gasGamma
@@ -72,6 +82,16 @@ module HLLC
   
   end subroutine primitive2HLLCFlux
 
+  !============================================================================
+  ! fullHLLCFlux:
+  !   Subroutine to calculate the HLLC flux over the entire domain. In the case
+  !   of the first half time step there is no need to apply the slope limiters,
+  !   but in the second they are needed in order to preserve the second order
+  !   accuracy.
+  ! Input:
+  !   halfStep -> the number of "half step" of the solution. Is used to select
+  !               a case inside the subroutine.
+  !============================================================================
   subroutine fullHLLCFlux(halfStep)
     
     use Globals, only: neq, nx, ny, prim, F, G
