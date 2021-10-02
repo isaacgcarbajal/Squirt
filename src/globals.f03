@@ -10,8 +10,8 @@ module Globals
   !--------------------------------------------------------------------------
   ! Spatial global constants
   !--------------------------------------------------------------------------
-	real*8, parameter :: dx = (xMax - xMin)/nx
-	real*8, parameter :: dy = (yMax - yMin)/ny
+  real*8, parameter :: dx = (xMax - xMin)/nx
+  real*8, parameter :: dy = (yMax - yMin)/ny
 
   !--------------------------------------------------------------------------
   ! Variables and Fluxes
