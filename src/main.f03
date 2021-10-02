@@ -13,6 +13,7 @@ program Main
   do while(currentTime < endTime)
 
     call validTimeStep()
+    
     call solutionStep()
 
     if(currentTime >= timeToPrint) then
