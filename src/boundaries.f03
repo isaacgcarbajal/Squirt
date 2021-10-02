@@ -2,6 +2,14 @@ module Boundaries
 
   contains
   
+  !============================================================================
+  ! boundaryConditionsI:
+  !   Subroutine to set a first order boundary conditions on a one ghost cell
+  !   per side of the domain.
+  ! Input:
+  !   u(neq, -1:nx+2, -1:ny+2) -> Array in which the boundary condicions will
+  !                               be imposed.
+  !============================================================================
   subroutine boundaryConditionsI(u)
   
     use Globals, only: neq, nx, ny
@@ -30,6 +38,14 @@ module Boundaries
     
   end subroutine boundaryConditionsI
   
+  !============================================================================
+  ! boundaryConditionsII:
+  !   Subroutine to set a second order boundary conditions on two ghost cells
+  !   per side of the domain.
+  ! Input:
+  !   u(neq, -1:nx+2, -1:ny+2) -> Array in which the boundary condicions will
+  !                               be imposed.
+  !============================================================================
   subroutine boundaryConditionsII(u)
   
     use Globals, only: neq, nx, ny
@@ -62,24 +78,42 @@ module Boundaries
     
   end subroutine boundaryConditionsII
   
-  subroutine applyNeumann(ghost, first)
+  !============================================================================
+  ! applyNeumann:
+  !   Subroutine to impose a Neumann boundary condition in one cell.
+  ! Input:
+  !   physical -> The physical cell to be copied
+  ! Output:
+  !   ghost    -> The ghost cell filled
+  !============================================================================
+  subroutine applyNeumann(ghost, physical)
     
     implicit none
     real*8, intent(out) :: ghost
-    real*8, intent(in)  :: first
+    real*8, intent(in)  :: physical
     
-    ghost = first
+    ghost = physical
   
   end subroutine applyNeumann
 
-  subroutine applyPeriodic(ghostL, first, last, ghostR)
+  !============================================================================
+  ! applyPeriodic:
+  !   Subroutine to impose a periodic boundary condition over two cells.
+  ! Input:
+  !   physicalL -> The physical cell in the "left" to be copied
+  !   physicalR -> The physical cell in the "right" to be copied
+  ! Output:
+  !   ghostL    -> The ghost "left" cell filled
+  !   ghostR    -> The ghost "right" cell filled
+  !============================================================================
+  subroutine applyPeriodic(ghostL, physicalL, physicalR, ghostR)
     
     implicit none
     real*8, intent(out) :: ghostL, ghostR
-    real*8, intent(in) :: first, last
+    real*8, intent(in) :: physicalL, physicalR
     
-    ghostL = last
-    ghostR = first
+    ghostL = physicalR
+    ghostR = physicalL
     
   end subroutine applyPeriodic
 
