@@ -2,7 +2,15 @@ module Solver
   
   contains
   
-  subroutine stepConserved(dt)
+  !============================================================================
+  ! stepAuxiliarConserved:
+  !   Subroutine to update the value of the array of auxiliar conserved
+  !   variables for a given "dt" assuming that the fluxes "f" and "g" have
+  !   already been calculated.
+  ! Input:
+  !   dt -> The time step of the update.
+  !============================================================================
+  subroutine stepAuxiliarConserved(dt)
     use Globals, only: neq, nx, ny, dx, dy, u, up, f, g
     implicit none
     
@@ -17,8 +25,14 @@ module Solver
       end do
     end do
     
-  end subroutine stepConserved
+  end subroutine stepAuxiliarConserved
 
+  !============================================================================
+  ! solutionStep:
+  !   Subroutine to make a full step of the simulation. Given an initial state
+  !   it calculates the next value for the conserved variables and updates the
+  !   current time and current iteration of the simulation.
+  !============================================================================
   subroutine solutionStep()
     use Globals, only: dt, u, up, currentIteration, currentTime
     use HydroCore, only: updatePrimitivesWith, fullPrimitive2conserved, addArtifitialViscosity
@@ -26,13 +40,17 @@ module Solver
     use HLLC, only: fullHLLCFlux
     implicit none
     
-    call fullHLLCFlux(1)
-    call stepConserved(dt/2)
+    integer :: halfStep
+    
+    halfStep = 1
+    call fullHLLCFlux(halfStep)
+    call stepAuxiliarConserved(dt/2)
     call boundaryConditionsII(up)
     call updatePrimitivesWith(up)
     
-    call fullHLLCFlux(2)
-    call stepConserved(dt)
+    halfStep = 2
+    call fullHLLCFlux(halfStep)
+    call stepAuxiliarConserved(dt)
     call addArtifitialViscosity()
     call boundaryConditionsI(u)
     call updatePrimitivesWith(u)
