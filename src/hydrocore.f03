@@ -2,6 +2,15 @@ module HydroCore
 
   contains
   
+  !============================================================================
+  ! conserved2primitive:
+  !   Subroutine to calculate the primitive variables given the conservated in
+  !   one cell of the domain.
+  ! Input:
+  !   uu(neq) -> Conserved variables in the cell.
+  ! Output:
+  !   pp(neq) -> Primitive variables in the cell.
+  !============================================================================
   subroutine conserved2primitive(uu,pp)
   
     use Globals, only: neq, nx, ny, gasGamma
@@ -16,6 +25,12 @@ module HydroCore
   
   end subroutine conserved2primitive
   
+  !============================================================================
+  ! fullConserved2primitive:
+  !   Subroutine to calculate the primitive variables on the entire domain
+  !   given the conservated variables. It makes use of the conserved2primitive
+  !   subroutine to calculate the variables in each cell.
+  !============================================================================
   subroutine fullConserved2primitive()
   
     use Globals, only: nx, ny, u, prim
@@ -31,7 +46,16 @@ module HydroCore
     end do
     
   end subroutine fullConserved2primitive
-
+  
+  !============================================================================
+  ! primitive2conserved:
+  !   Subroutine to calculate the conservated variables given the primitives in
+  !   one cell of the domain.
+  ! Input:
+  !   pp(neq) -> Primitive variables in the cell.
+  ! Output:
+  !   uu(neq) -> Conserved variables in the cell.
+  !============================================================================
   subroutine primitive2conserved(pp,uu)
   
     use Globals, only: neq, nx, ny, gasGamma
@@ -46,6 +70,12 @@ module HydroCore
   
   end subroutine primitive2conserved
   
+  !============================================================================
+  ! fullPrimitive2conserved:
+  !   Subroutine to calculate the conserved variables on the entire domain
+  !   given the primitive variables. It makes use of the primitive2conserved
+  !   subroutine to calculate the variables in each cell.
+  !============================================================================
   subroutine fullPrimitive2conserved()
   
     use Globals, only: nx, ny, u, prim
@@ -62,6 +92,14 @@ module HydroCore
     
   end subroutine fullPrimitive2conserved
 
+  !============================================================================
+  ! updatePrimitivesWith:
+  !   Subroutine to update the value of the global array of primitive variables
+  !   using an array of conservated variables as an input.
+  ! Input:
+  !   u(neq,-1:nx+2,-1:ny+2) -> Array of conservated variables in the entire
+  !                             domain.
+  !============================================================================
   subroutine updatePrimitivesWith(u)
     
     use Globals, only: neq, nx, ny, prim, gasGamma
@@ -83,6 +121,16 @@ module HydroCore
     
   end subroutine updatePrimitivesWith
 
+  !============================================================================
+  ! soundSpeed:
+  !   Subroutine to calculate the sound speed for an ideal gas given the
+  !   density and the pressure.
+  ! Input:
+  !   rho -> Local density
+  !   P   -> Local pressure
+  ! Output:
+  !   cs  -> Sound speed
+  !============================================================================
   subroutine soundSpeed(rho, P, cs)
     
     use Globals, only: gasGamma
@@ -94,6 +142,12 @@ module HydroCore
     
   end subroutine soundSpeed
 
+  !============================================================================
+  ! validTimeStep:
+  !   Subroutine to calculate the current valid time step for the simulation.
+  !   Is related to how fast the information travels across the domain.
+  !   This subroutine updates the value of the global variable "dt"
+  !============================================================================
   subroutine validTimeStep()
     
     use Globals, only: nx, ny, prim, dt, CFL, dx, dy
@@ -123,6 +177,15 @@ module HydroCore
     
   end subroutine validTimeStep
   
+  !============================================================================
+  ! primitive2EulerFluxes:
+  !   Subroutine to calculate the fluxes of the Euler equations via the
+  !   primitive variables in one cell.
+  ! Input:
+  !   pp(neq) -> Primitive variables on the cell.
+  ! Output:
+  !   ff(neq) -> Euler flux on the cell.
+  !============================================================================
   subroutine primitive2EulerFluxes(pp,ff)
   
     use Globals, only: neq, gasGamma
@@ -138,6 +201,12 @@ module HydroCore
     
   end subroutine primitive2EulerFluxes
 
+  !============================================================================
+  ! addArtifitialViscosity:
+  !   Subroutine to copy the auxiliar array of conserved variables "up" into
+  !   the array of conserved variables "u" adding artifitial viscosity moduled
+  !   by the parameter "eta".
+  !============================================================================
   subroutine addArtifitialViscosity()
   
     use Globals, only: nx, ny, u, up, eta
@@ -155,6 +224,18 @@ module HydroCore
   
   end subroutine addArtifitialViscosity
 
+  !============================================================================
+  ! slopeLimiter:
+  !   Subroutine to restrict the values of the primitives on the left and right
+  !   sides of a cell. It is necessary two ghost cells on each frontier of the
+  !   domain. Makes use of the "minmod" limiter.
+  ! Input:
+  !   ppll(neq) -> Primitive variables on the left of the left side of the cell
+  !   ppl(neq)  -> Primitive variables on the left side of the cell
+  !   ppr(neq)  -> Primitive variables on the right side of the cell
+  !   pprr(neq) -> Primitive variables on the right of the right side of the
+  !                cell
+  !============================================================================
   subroutine slopeLimiter(ppll, ppl, ppr, pprr)
   
     use Globals, only: neq
@@ -183,7 +264,7 @@ module HydroCore
     
     contains
     
-    real function average(a,b)
+    real*8 function average(a,b)
       implicit none
       real*8 :: s
 
