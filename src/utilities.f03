@@ -81,9 +81,9 @@ module Utilities
   !   been calculated.
   !============================================================================
   subroutine swapXY(var)
-    use Globals, only: neq
-    real*8, intent(inout) :: var(neq)
-    real*8 :: aux
+    use Globals, only: rp, neq
+    real(rp), intent(inout) :: var(neq)
+    real(rp) :: aux
     
     aux = var(2)
     var(2) = var(3)
