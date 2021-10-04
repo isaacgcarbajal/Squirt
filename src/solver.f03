@@ -11,10 +11,10 @@ module Solver
   !   dt -> The time step of the update.
   !============================================================================
   subroutine stepAuxiliarConserved(dt)
-    use Globals, only: neq, nx, ny, dx, dy, u, up, f, g
+    use Globals, only: rp, neq, nx, ny, dx, dy, u, up, f, g
     implicit none
     
-    real*8, intent(in) :: dt
+    real(rp), intent(in) :: dt
     
     integer :: i, j
     do j=1,ny
