@@ -14,16 +14,16 @@ module HLLC
   !============================================================================
   subroutine primitive2HLLCFlux(ppL, ppR, ff)
   
-    use Globals, only: neq, gasGamma
+    use Globals, only: rp, neq, gasGamma
     use HydroCore, only: soundSpeed, primitive2EulerFluxes, primitive2conserved
     implicit none
-    real*8, intent(in) :: ppL(neq), ppR(neq)
-    real*8, intent(out):: ff(neq)
+    real(rp), intent(in) :: ppL(neq), ppR(neq)
+    real(rp), intent(out):: ff(neq)
     
-    real*8 :: csL, csR, sL, sR, sst
-    real*8 :: rhost, Ek
+    real(rp) :: csL, csR, sL, sR, sst
+    real(rp) :: rhost, Ek
     
-    real*8 :: uu(neq), uuk(neq)
+    real(rp) :: uu(neq), uuk(neq)
     
     call soundSpeed(ppL(1), ppL(4), csL)
     call soundSpeed(ppR(1), ppR(4), csR)
@@ -94,16 +94,16 @@ module HLLC
   !============================================================================
   subroutine fullHLLCFlux(halfStep)
     
-    use Globals, only: neq, nx, ny, prim, F, G
+    use Globals, only: rp, neq, nx, ny, prim, F, G
     use Utilities, only: swapXY
     use HydroCore, only: slopeLimiter
     implicit none
     
     integer, intent(in) :: halfStep
     
-    real*8 :: ppL(neq), ppR(neq)
-    real*8 :: ppLL(neq), ppRR(neq)
-    real*8 :: tmpFlux(neq)
+    real(rp) :: ppL(neq), ppR(neq)
+    real(rp) :: ppLL(neq), ppRR(neq)
+    real(rp) :: tmpFlux(neq)
     
     integer :: i, j
     
