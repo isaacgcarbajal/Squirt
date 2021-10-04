@@ -12,8 +12,8 @@ module Boundaries
   !============================================================================
   subroutine boundaryConditionsI(u)
   
-    use Globals, only: neq, nx, ny
-    real*8, intent(inout) :: u(neq, -1:nx+2, -1:ny+2)
+    use Globals, only: dp, neq, nx, ny
+    real(dp), intent(inout) :: u(neq, -1:nx+2, -1:ny+2)
     
     integer ieq, i, j
     
@@ -48,8 +48,8 @@ module Boundaries
   !============================================================================
   subroutine boundaryConditionsII(u)
   
-    use Globals, only: neq, nx, ny
-    real*8, intent(inout) :: u(neq, -1:nx+2, -1:ny+2)
+    use Globals, only: dp, neq, nx, ny
+    real(dp), intent(inout) :: u(neq, -1:nx+2, -1:ny+2)
     
     integer ieq, i, j
     
@@ -88,9 +88,10 @@ module Boundaries
   !============================================================================
   subroutine applyNeumann(ghost, physical)
     
+    use Globals, only: dp
     implicit none
-    real*8, intent(out) :: ghost
-    real*8, intent(in)  :: physical
+    real(dp), intent(out) :: ghost
+    real(dp), intent(in)  :: physical
     
     ghost = physical
   
@@ -108,9 +109,10 @@ module Boundaries
   !============================================================================
   subroutine applyPeriodic(ghostL, physicalL, physicalR, ghostR)
     
+    use Globals, only: dp
     implicit none
-    real*8, intent(out) :: ghostL, ghostR
-    real*8, intent(in) :: physicalL, physicalR
+    real(dp), intent(out) :: ghostL, ghostR
+    real(dp), intent(in) :: physicalL, physicalR
     
     ghostL = physicalR
     ghostR = physicalL
