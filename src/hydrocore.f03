@@ -13,10 +13,10 @@ module HydroCore
   !============================================================================
   subroutine conserved2primitive(uu,pp)
   
-    use Globals, only: neq, nx, ny, gasGamma
+    use Globals, only: rp, neq, nx, ny, gasGamma
     implicit none
-    real*8, intent(in)  :: uu(neq)
-    real*8, intent(out) :: pp(neq)
+    real(rp), intent(in)  :: uu(neq)
+    real(rp), intent(out) :: pp(neq)
     
     pp(1) = uu(1)
     pp(2) = uu(2)/uu(1)
@@ -58,10 +58,10 @@ module HydroCore
   !============================================================================
   subroutine primitive2conserved(pp,uu)
   
-    use Globals, only: neq, nx, ny, gasGamma
+    use Globals, only: rp, neq, nx, ny, gasGamma
     implicit none
-    real*8, intent(in)  :: pp(neq)
-    real*8, intent(out) :: uu(neq)
+    real(rp), intent(in)  :: pp(neq)
+    real(rp), intent(out) :: uu(neq)
     
     uu(1) = pp(1)
     uu(2) = pp(1)*pp(2)
@@ -102,10 +102,10 @@ module HydroCore
   !============================================================================
   subroutine updatePrimitivesWith(u)
     
-    use Globals, only: neq, nx, ny, prim, gasGamma
+    use Globals, only: rp, neq, nx, ny, prim, gasGamma
     implicit none
     
-    real*8, intent(in) :: u(neq,-1:nx+2,-1:ny+2)
+    real(rp), intent(in) :: u(neq,-1:nx+2,-1:ny+2)
 
     integer :: i, j
     do j=-1,ny+2
@@ -133,10 +133,10 @@ module HydroCore
   !============================================================================
   subroutine soundSpeed(rho, P, cs)
     
-    use Globals, only: gasGamma
+    use Globals, only: rp, gasGamma
     implicit none
-    real*8, intent(in) :: rho, P
-    real*8, intent(out) :: cs
+    real(rp), intent(in) :: rho, P
+    real(rp), intent(out) :: cs
     
     cs = sqrt(gasGamma*P/rho)
     
@@ -150,12 +150,12 @@ module HydroCore
   !============================================================================
   subroutine validTimeStep()
     
-    use Globals, only: nx, ny, prim, dt, CFL, dx, dy
+    use Globals, only: rp, nx, ny, prim, dt, CFL, dx, dy
     implicit none
     
-    real*8 :: cs
-    real*8 :: maxSpeedX = 0.0
-    real*8 :: maxSpeedY = 0.0
+    real(rp) :: cs
+    real(rp) :: maxSpeedX = 0.0
+    real(rp) :: maxSpeedY = 0.0
     
     integer :: i, j
     do j=-1,ny+2
@@ -188,11 +188,11 @@ module HydroCore
   !============================================================================
   subroutine primitive2EulerFluxes(pp,ff)
   
-    use Globals, only: neq, gasGamma
+    use Globals, only: rp, neq, gasGamma
     implicit none
     
-    real*8, intent(in)  :: pp(neq)
-    real*8, intent(out) :: ff(neq)
+    real(rp), intent(in)  :: pp(neq)
+    real(rp), intent(out) :: ff(neq)
     
     ff(1) = pp(1)*pp(2)
     ff(2) = pp(1)*pp(2)**2 + pp(4)
@@ -238,13 +238,13 @@ module HydroCore
   !============================================================================
   subroutine slopeLimiter(ppll, ppl, ppr, pprr)
   
-    use Globals, only: neq
+    use Globals, only: rp, neq
     implicit none
-    real*8, intent(in)   :: ppll(neq), pprr(neq)
-    real*8, intent(inout):: ppl(neq), ppr(neq)
+    real(rp), intent(in)   :: ppll(neq), pprr(neq)
+    real(rp), intent(inout):: ppl(neq), ppr(neq)
     
-    real*8 :: deltaL, deltaM, deltaR
-    real*8 :: avrgL, avrgR
+    real(rp) :: deltaL, deltaM, deltaR
+    real(rp) :: avrgL, avrgR
     
     integer::ieq
       
@@ -264,11 +264,11 @@ module HydroCore
     
     contains
     
-    real*8 function average(a,b)
+    real(rp) function average(a,b)
       implicit none
-      real*8 :: s
+      real(rp) :: s
 
-      real*8, intent(in) :: a, b
+      real(rp), intent(in) :: a, b
     
       ! minmod limiter
       s = sign(1.0D0,a)
