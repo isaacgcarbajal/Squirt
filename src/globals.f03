@@ -3,17 +3,6 @@ module Globals
   implicit none
   
   !--------------------------------------------------------------------------
-  ! Presicion of the real variables
-  !--------------------------------------------------------------------------
-  integer, parameter ::                             &
-      sp = kind(1.0),                               &
-      dp = selected_real_kind(2*precision(1.0_sp)), &
-      qp = selected_real_kind(2*precision(1.0_dp))
-  
-  ! real precision (rp)
-  integer, parameter :: rp = dp
-  
-  !--------------------------------------------------------------------------
   ! Number of equations in the system
   !--------------------------------------------------------------------------
   integer, parameter :: neq = 4
