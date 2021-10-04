@@ -271,7 +271,7 @@ module HydroCore
       real(rp), intent(in) :: a, b
     
       ! minmod limiter
-      s = sign(1.0D0,a)
+      s = sign(1.0_rp,a)
       average = s*max(0.0,min(abs(a),s*b))
     
     end function average
