@@ -216,7 +216,7 @@ module HydroCore
     integer :: ieq, i, j
     do j=1,ny
       do i=1,nx
-        do ieq,neq
+        do ieq=1,neq
       
           if (                                                                       &
             ((up(ieq,i,j) - up(ieq,i-1,j) )*(up(ieq,i+1,j) - up(ieq,i,j)) < 0) .or.  &
