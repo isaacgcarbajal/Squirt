@@ -206,19 +206,29 @@ module HydroCore
   !   Subroutine to copy the auxiliar array of conserved variables "up" into
   !   the array of conserved variables "u" adding artifitial viscosity moduled
   !   by the parameter "eta".
+  !   The viscosity is added only if where are local maximum or minimum.
   !============================================================================
   subroutine addArtifitialViscosity()
   
-    use Globals, only: nx, ny, u, up, eta
+    use Globals, only: neq, nx, ny, u, up, eta
     implicit none
     
-    integer :: i, j
+    integer :: ieq, i, j
     do j=1,ny
       do i=1,nx
+        do ieq,neq
       
-        u(:,i,j) = up(:,i,j) + eta*(  up(:,i-1,j) + up(:,i+1,j)  &
-                                    + up(:,i,j-1) + up(:,i,j+1)  &
-                                    - 4*up(:,i,j))
+          if (                                                                       &
+            ((up(ieq,i,j) - up(ieq,i-1,j) )*(up(ieq,i+1,j) - up(ieq,i,j)) < 0) .or.  &
+            ((up(ieq,i,j) - up(ieq,i,j-1) )*(up(ieq,i,j+1) - up(ieq,i,j)) < 0)       &
+            ) then
+            u(ieq,i,j) = up(ieq,i,j) + eta*(  up(ieq,i-1,j) + up(ieq,i+1,j)  &
+                                            + up(ieq,i,j-1) + up(ieq,i,j+1)  &
+                                           -4*up(ieq,i,j))
+          else
+            u(ieq,i,j) = up(ieq,i,j)
+          end if
+        end do
       end do
     end do
   
